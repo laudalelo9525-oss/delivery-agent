@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: delivery-agent
+    env: python
+    plan: free
+    
+    buildCommand: pip install -r web_requirements.txt
+    startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT web_app:app
+    
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.11
+      - key: FLASK_ENV
+        value: production
+
+    preDeployCommand: |
+      apt-get update && apt-get install -y \
+        tesseract-ocr \
+        libtesseract-dev \
+        libopenjp2-7 \
+        libjpeg-dev \
+        zlib1g-dev \
+        libffi-dev \
+        libssl-dev
