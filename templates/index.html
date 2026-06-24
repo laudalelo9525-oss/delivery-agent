@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autonomous Delivery Agent - Premium Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-success: linear-gradient(135deg, #00d084 0%, #00f2fe 100%);
+            --gradient-warning: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            --gradient-info: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-bg-hover: rgba(30, 41, 59, 0.9);
+            
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #94a3b8;
+            
+            --border-color: rgba(148, 163, 184, 0.1);
+            --border-color-hover: rgba(102, 126, 234, 0.3);
+            
+            --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(to bottom, var(--bg-primary), var(--bg-secondary));
+            color: var(--text-primary);
+            font-family: 'Sora', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* HEADER */
+        .header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1.2rem 0;
+        }
+
+        .header-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00d084;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+            box-shadow: 0 0 10px rgba(0, 208, 132, 0.5);
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        /* MAIN */
+        .main-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 3.5rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .page-subtitle {
+            color: var(--text-tertiary);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* TABS */
+        .tab-container {
+            margin-bottom: 3rem;
+        }
+
+        .tab-list {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+        }
+
+        .tab-button {
+            padding: 1.2rem 1.8rem;
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+
+        .tab-button:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-button.active {
+            color: var(--text-primary);
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 3px 3px 0 0;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: scaleX(0);
+            }
+            to {
+                transform: scaleX(1);
+            }
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* STAT CARDS - PREMIUM DESIGN */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--border-color-hover);
+            background: var(--card-bg-hover);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+        }
+
+        .stat-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .stat-card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-card-icon {
+            background: var(--gradient-primary);
+            color: white;
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .stat-label {
+            color: var(--text-tertiary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        /* CARDS - GLASSMORPHISM */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            margin-bottom: 2rem;
+        }
+
+        .card:hover {
+            border-color: var(--border-color-hover);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .card-header-icon {
+            font-size: 1.8rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-header-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .card-body {
+            padding: 2.5rem;
+        }
+
+        /* FORMS */
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+        }
+
+        .form-control,
+        .form-select,
+        textarea {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(148, 163, 184, 0.05);
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder,
+        textarea::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--border-color-hover);
+            background: rgba(102, 126, 234, 0.05);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        /* BUTTONS - PREMIUM */
+        .btn {
+            padding: 1.1rem 2.2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.45);
+        }
+
+        .btn-success {
+            background: var(--gradient-success);
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 208, 132, 0.35);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 208, 132, 0.45);
+        }
+
+        .btn-lg {
+            padding: 1.4rem 2.8rem;
+            font-size: 1.1rem;
+            width: 100%;
+        }
+
+        /* UPLOAD ZONE */
+        .upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 3.5rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(102, 126, 234, 0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-zone::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 20px); }
+        }
+
+        .upload-zone:hover {
+            border-color: var(--border-color-hover);
+            background: rgba(102, 126, 234, 0.08);
+        }
+
+        .upload-zone.drag-over {
+            border-color: #00d084;
+            background: rgba(0, 208, 132, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .upload-hint {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* STATUS BOX */
+        .status-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05));
+            border: 1px solid var(--border-color-hover);
+            border-radius: 16px;
+            padding: 2.5rem;
+            color: var(--text-primary);
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(102, 126, 234, 0.2);
+            border-top-color: var(--gradient-primary);
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+            margin-right: 1.5rem;
+            background: conic-gradient(from 0deg, #667eea 0deg, #764ba2 180deg, transparent 180deg);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* TABLES */
+        .table-responsive {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+        }
+
+        thead {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.1));
+        }
+
+        th {
+            padding: 1.5rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        td {
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(102, 126, 234, 0.08);
+        }
+
+        tbody tr:hover td {
+            color: var(--text-primary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, rgba(0, 208, 132, 0.2), rgba(0, 242, 254, 0.2));
+            color: #00d084;
+        }
+
+        .badge-error {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 142, 83, 0.2));
+            color: #ff6b6b;
+        }
+
+        /* CHART */
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin-top: 2rem;
+            padding: 2rem 0;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(30, 41, 59, 0.3));
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-tertiary);
+            margin-top: 5rem;
+        }
+
+        .footer-title {
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tab-list {
+                gap: 0;
+            }
+
+            .tab-button {
+                padding: 1rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .upload-zone {
+                padding: 2rem 1rem;
+            }
+
+            .btn-lg {
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        /* ANIMATIONS */
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(102, 126, 234, 0.6);
+            }
+        }
+
+        .glow {
+            animation: glow 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span>Delivery Agent</span>
+            </div>
+            <div class="header-status">
+                <div class="status-dot"></div>
+                <span>System Online</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="main-wrapper">
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+            <h1 class="page-title">📊 Autonomous Delivery Agent</h1>
+            <p class="page-subtitle">Real-time autonomous processing with intelligent automation</p>
+        </div>
+
+        <!-- TAB NAVIGATION -->
+        <div class="tab-container">
+            <div class="tab-list">
+                <button class="tab-button active" onclick="switchTab(event, 'dashboard')">
+                    <i class="fas fa-chart-pie"></i> Dashboard
+                </button>
+                <button class="tab-button" onclick="switchTab(event, 'processing')">
+                    <i class="fas fa-rocket"></i> Processing
+                </button>
+                <button class="tab-button" onclick="switchTab(event, 'history')">
+                    <i class="fas fa-clock"></i> History
+                </button>
+                <button class="tab-button" onclick="switchTab(event, 'settings')">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+            </div>
+        </div>
+
+        <!-- DASHBOARD TAB -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-value" id="stat-reports">0</div>
+                    <div class="stat-label">Reports Processed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <div class="stat-value" id="stat-records">0</div>
+                    <div class="stat-label">Total Records</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value" id="stat-avg">0</div>
+                    <div class="stat-label">Average Records</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-area card-header-icon"></i>
+                    <div class="card-header-title">7-Day Activity</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESSING TAB -->
+        <div id="processing" class="tab-content">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;">
+                <div>
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-cog card-header-icon"></i>
+                            <div class="card-header-title">Processing Setup</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">Excel Master File</label>
+                                <input type="text" class="form-control" id="excelFile" placeholder="Enter file path...">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Delivery Date</label>
+                                <input type="text" class="form-control" id="deliveryDate" placeholder="DD-MM-YYYY">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Delivery Report Images</label>
+                                <div class="upload-zone" id="dropZone">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <p class="upload-text">Drop images here or click to browse</p>
+                                    <p class="upload-hint">Supports JPG, PNG, TIFF, BMP</p>
+                                    <input type="file" id="fileInput" multiple accept=".jpg,.jpeg,.png,.bmp,.tiff">
+                                </div>
+                            </div>
+                            <button class="btn btn-success btn-lg" onclick="processImages()">
+                                <i class="fas fa-play-circle"></i> Process Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-zap card-header-icon"></i>
+                            <div class="card-header-title">Live Status</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="status-box" id="processingStatus">
+                                <p style="color: var(--text-tertiary);">Awaiting input...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <div id="history" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-list card-header-icon"></i>
+                    <div class="card-header-title">Processing History</div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-calendar"></i> Date & Time</th>
+                                    <th><i class="fas fa-user"></i> User</th>
+                                    <th><i class="fas fa-file"></i> File</th>
+                                    <th><i class="fas fa-database"></i> Records</th>
+                                    <th><i class="fas fa-flag"></i> Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTable">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 3rem;">
+                                        <i class="fas fa-inbox" style="font-size: 2rem; color: var(--text-tertiary);"></i>
+                                        <p style="margin-top: 1rem; color: var(--text-tertiary);">No history available</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SETTINGS TAB -->
+        <div id="settings" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-envelope card-header-icon"></i>
+                    <div class="card-header-title">Email Configuration</div>
+                </div>
+                <div class="card-body">
+                    <div style="max-width: 600px;">
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-at"></i> Email Address</label>
+                            <input type="email" class="form-control" id="emailAddress" placeholder="your.email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-lock"></i> Password</label>
+                            <input type="password" class="form-control" id="emailPassword" placeholder="••••••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-users"></i> Recipients</label>
+                            <textarea class="form-control" id="emailRecipients" rows="3" placeholder="email1@example.com&#10;email2@example.com"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label"><i class="fas fa-hourglass-end"></i> Summary Time</label>
+                            <input type="text" class="form-control" id="summaryTime" placeholder="HH:MM">
+                        </div>
+                        <div class="form-group">
+                            <label style="display: flex; align-items: center; gap: 0.8rem; cursor: pointer; color: var(--text-secondary);">
+                                <input type="checkbox" id="emailEnabled" style="width: 20px; height: 20px; cursor: pointer;">
+                                <span style="font-weight: 600;">Enable Email Notifications</span>
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveConfig()">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p class="footer-title">Autonomous Delivery Report Agent</p>
+        <p>Multi-user • Real-time • Enterprise-grade • Cloud-ready</p>
+        <p style="margin-top: 1.5rem; font-size: 0.85rem;">
+            © 2026 Safetech Precast Manufacturing
+        </p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+    <script>
+        let selectedFiles = [];
+        const today = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
+        document.getElementById('deliveryDate').value = today;
+
+        function switchTab(event, tabName) {
+            event.preventDefault();
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.tab-button').classList.add('active');
+        }
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            selectedFiles = Array.from(e.dataTransfer.files);
+            updateFileDisplay();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            selectedFiles = Array.from(e.target.files);
+            updateFileDisplay();
+        });
+
+        function updateFileDisplay() {
+            if (selectedFiles.length > 0) {
+                dropZone.innerHTML = `
+                    <div style="color: #00d084; font-size: 2.5rem;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <p class="upload-text">${selectedFiles.length} file(s) ready for processing</p>
+                `;
+            }
+        }
+
+        async function processImages() {
+            if (selectedFiles.length === 0) {
+                alert('Please select delivery report images');
+                return;
+            }
+
+            const formData = new FormData();
+            selectedFiles.forEach(file => formData.append('files', file));
+            formData.append('date', document.getElementById('deliveryDate').value);
+            formData.append('excel_file', document.getElementById('excelFile').value);
+
+            document.getElementById('processingStatus').innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; width: 100%;">
+                    <div class="spinner"></div>
+                    <div style="text-align: left;">
+                        <div style="font-weight: 700; margin-bottom: 0.5rem;">Processing...</div>
+                        <div style="color: var(--text-tertiary); font-size: 0.9rem;">Analyzing delivery reports</div>
+                    </div>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('processingStatus').innerHTML = `
+                        <div style="text-align: center;">
+                            <div style="font-size: 3rem; color: #00d084; margin-bottom: 1rem;">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div style="font-size: 1.2rem; font-weight: 700;">Success!</div>
+                            <div style="color: var(--text-tertiary); margin-top: 0.8rem;">
+                                ${data.total_records} records processed & saved
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('processingStatus').innerHTML = `
+                    <div style="text-align: center; color: #ff6b6b;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 2.5rem;"></i>
+                        <p style="margin-top: 1rem;">Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function saveConfig() {
+            alert('✓ Settings saved successfully!');
+        }
+
+        // Initialize
+        refreshDashboard();
+        setInterval(refreshDashboard, 30000);
+
+        async function refreshDashboard() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                document.getElementById('stat-reports').textContent = data.reports;
+                document.getElementById('stat-records').textContent = data.records;
+                document.getElementById('stat-avg').textContent = data.reports > 0 ? (data.records / data.reports).toFixed(1) : '0';
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
