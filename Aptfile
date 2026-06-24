@@ -1,0 +1,11 @@
+# System dependencies for Heroku
+# Requires https://github.com/heroku-community/apt-buildpack
+
+# OCR Engine
+tesseract-ocr
+libtesseract-dev
+
+# Image processing
+libopenjp2-7
+libjpeg-dev
+zlib1g-dev

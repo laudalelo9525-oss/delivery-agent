@@ -1,0 +1,35 @@
+{
+  "name": "Autonomous Delivery Report Agent",
+  "description": "Multi-user web application for autonomous delivery report processing",
+  "repository": "https://github.com/yourusername/delivery-agent",
+  "keywords": ["delivery", "agent", "automation", "ocr", "excel"],
+  "logo": "https://cdn-icons-png.flaticon.com/512/4436/4436481.png",
+  "success_url": "/",
+  "website": "https://github.com/yourusername/delivery-agent",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "https://github.com/heroku-community/apt-buildpack"
+    }
+  ],
+  "env": {
+    "FLASK_ENV": {
+      "description": "Flask environment (production or development)",
+      "value": "production"
+    },
+    "SECRET_KEY": {
+      "description": "Flask secret key for sessions",
+      "generator": "secret"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:hobby-dev",
+      "options": {
+        "version": "13"
+      }
+    }
+  ]
+}
